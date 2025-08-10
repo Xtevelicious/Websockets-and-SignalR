@@ -12,7 +12,7 @@ connectionUrl.value = "ws://localhost:5000";
 
 connectButton.onclick = function () {
     stateLabel.innerHTML = "Attempting to connect...";
-    let socket = new WebSocket(connectionUrl.value);
+    socket = new WebSocket(connectionUrl.value);
 
     socket.onopen = function (event) {
         updateState();
