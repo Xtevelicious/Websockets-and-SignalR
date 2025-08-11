@@ -39,6 +39,8 @@ connectButton.onclick = function () {
                 <td>Client</td>
                 <td>${htmlEscape(event.data)}</td>
             </tr>`;
+        if(isConnId(event.data))
+            connId.innerHTML = event.data;
     };
 };
 
@@ -62,6 +64,10 @@ sendButton.onclick = function () {
                 <td>${htmlEscape(data)}</td>
             </tr>`;
 };
+
+function isConnId(str) {
+    return str.substring(0, 14) == "Connection ID:";
+}
 
 function htmlEscape (str) {
     return str.toString()
