@@ -42,6 +42,26 @@ connectButton.onclick = function () {
     };
 };
 
+closeButton.onclick = function () {
+    if(!socket || socket.readyState !== WebSocket.OPEN)
+        alert("Socket not already connected.");
+
+    socket.close(1000, "Closing from client.");
+};
+
+sendButton.onclick = function () {
+    if(!socket || socket.readyState !== WebSocket.OPEN)
+        alert("Socket not connected.");
+
+    let data = sendMessage.value;
+    commsLog.innerHTML += 
+            `<tr>
+                <td>Server</td>
+                <td>Client</td>
+                <td>${htmlEscape(data)}</td>
+            </tr>`;
+};
+
 function htmlEscape (str) {
     return str.toString()
      .replace(/&/g, '&amp;')
@@ -53,21 +73,21 @@ function htmlEscape (str) {
 
 function updateState () {
     function disable () {
-        sendButton.disable = true;
-        sendMessage.disable = true;
-        closeButton.disable = true;
-        recipients.disable = true;
+        sendButton.disabled = true;
+        sendMessage.disabled = true;
+        closeButton.disabled = true;
+        recipients.disabled = true;
     }
 
     function enable () {
-        sendButton.disable = false;
-        sendMessage.disable = false;
-        closeButton.disable = false;
-        recipients.disable = false;
+        sendButton.disabled = false;
+        sendMessage.disabled = false;
+        closeButton.disabled = false;
+        recipients.disabled = false;
     }
 
-    connectButton.disable = true;
-    connectionUrl.disable = true;
+    connectButton.disabled = true;
+    connectionUrl.disabled = true;
 
     if(!socket)
         disable();
@@ -77,8 +97,8 @@ function updateState () {
                 stateLabel.innerHTML = "Closed";
                 connId.innerHTML = "Connection ID: N/A";
                 disable();
-                connectionUrl.disable = false;
-                connectButton.disable = false;
+                connectionUrl.disabled = false;
+                connectButton.disabled = false;
                 break;
             
             case WebSocket.CLOSING:
@@ -93,6 +113,8 @@ function updateState () {
 
             default:
                 stateLabel.innerHTML = `Unknown socket state: ${htmlEscape(socket.readyState)}`;
+                disable();
+                break;
 
         }
     }
