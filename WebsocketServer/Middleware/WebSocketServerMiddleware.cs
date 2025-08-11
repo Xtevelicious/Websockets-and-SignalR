@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using System.Text;
 
 namespace WebsocketServer.Middleware
 {
@@ -23,6 +24,7 @@ namespace WebsocketServer.Middleware
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
                         Console.WriteLine("Message received.");
+                        Console.WriteLine($"Message: {Encoding.UTF8.GetString(buffer, 0, result.Count)}");
                         return;
                     }
                     else if (result.MessageType == WebSocketMessageType.Close)

@@ -54,6 +54,7 @@ sendButton.onclick = function () {
         alert("Socket not connected.");
 
     let data = sendMessage.value;
+    socket.send(data);
     commsLog.innerHTML += 
             `<tr>
                 <td>Server</td>
