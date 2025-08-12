@@ -26,21 +26,21 @@ connectButton.onclick = function () {
         updateState();
         commsLog.innerHTML += 
             `<tr>
-                <td colspan="3">Connection closed. Code: ${htmlEscape(event.code)} Reason: ${htmlEscape(event.reason)}</td>
+                <td colspan="3">Connection closed. <b>Code: </b>${htmlEscape(event.code)} Reason: ${htmlEscape(event.reason)}</td>
             </tr>`;
     };
 
     socket.onerror = updateState();
 
     socket.onmessage = function (event) {
+        if(isConnId(event.data)) {
+            connId.innerHTML = event.data;
+            return;
+        }
         commsLog.innerHTML += 
             `<tr>
-                <td>Server</td>
-                <td>Client</td>
-                <td>${htmlEscape(event.data)}</td>
+                <td colspan="3"><b>Message Received: </b>${htmlEscape(event.data)}</td>
             </tr>`;
-        if(isConnId(event.data))
-            connId.innerHTML = event.data;
     };
 };
 
@@ -55,18 +55,26 @@ sendButton.onclick = function () {
     if(!socket || socket.readyState !== WebSocket.OPEN)
         alert("Socket not connected.");
 
-    let data = sendMessage.value;
+    let data = constructJSON();
     socket.send(data);
-    commsLog.innerHTML += 
-            `<tr>
-                <td>Server</td>
-                <td>Client</td>
-                <td>${htmlEscape(data)}</td>
-            </tr>`;
+    commsLog.innerHTML += "Message sent!"
+            // `<tr>
+            //     <td>Server</td>
+            //     <td>Client</td>
+            //     <td>${htmlEscape(data)}</td>
+            // </tr>`;
 };
 
 function isConnId(str) {
     return str.substring(0, 14) == "Connection ID:";
+}
+
+function constructJSON() {
+    return JSON.stringify({
+        "From": connId.innerHTML.substring(15, connId.innerHTML.length),
+        "To": recipients.value,
+        "Message": sendMessage.value
+    });
 }
 
 function htmlEscape (str) {
