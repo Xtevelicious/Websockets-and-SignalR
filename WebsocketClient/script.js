@@ -26,7 +26,7 @@ connectButton.onclick = function () {
         updateState();
         commsLog.innerHTML += 
             `<tr>
-                <td colspan="3">Connection closed. <b>Code: </b>${htmlEscape(event.code)} Reason: ${htmlEscape(event.reason)}</td>
+                <td colspan="3">Connection closed. <b>Code: </b>${htmlEscape(event.code)} <b>Reason: </b>${htmlEscape(event.reason)}</td>
             </tr>`;
     };
 

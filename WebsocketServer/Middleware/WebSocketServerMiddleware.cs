@@ -41,6 +41,14 @@ namespace WebsocketServer.Middleware
                     else if (result.MessageType == WebSocketMessageType.Close)
                     {
                         Console.WriteLine("Received close message.");
+
+                        var sockets = _manager.GetAllSockets();
+                        var id = sockets.FirstOrDefault(s => s.Value == webSocket).Key;
+                        
+                        sockets.TryRemove(id, out WebSocket socket);
+
+                        await socket.CloseAsync((WebSocketCloseStatus)socket.CloseStatus, socket.CloseStatusDescription, CancellationToken.None);
+                        
                         return;
                     }
                 });
@@ -85,7 +93,7 @@ namespace WebsocketServer.Middleware
                     Console.WriteLine("Invalid recipient");
                     return;
                 }
-                
+
                 if (socket.Value.State == WebSocketState.Open)
                     await socket.Value.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
             }
