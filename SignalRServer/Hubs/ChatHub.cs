@@ -16,7 +16,7 @@ namespace SignalRServer.Hubs
 
         public async Task SendMessageAsync(string jsonMessage)
         {
-            var routeObj = JsonSerializer.Deserialize<dynamic>(jsonMessage);
+            var routeObj = JsonSerializer.Deserialize<JsonElement>(jsonMessage);
             var recipientId = routeObj.GetProperty("To").GetString();
 
             if (string.IsNullOrEmpty(recipientId))
