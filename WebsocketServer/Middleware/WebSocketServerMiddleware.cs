@@ -82,11 +82,11 @@ namespace WebsocketServer.Middleware
         {
             var routeObj = JsonSerializer.Deserialize<dynamic>(jsonMessage);
             var message = Encoding.UTF8.GetBytes(routeObj.GetProperty("Message").GetString());
-            var recipient = routeObj.GetProperty("To").GetString();
+            var recipientId = routeObj.GetProperty("To").GetString();
 
-            if (Guid.TryParse(recipient, out Guid guidOutput))
+            if (Guid.TryParse(recipientId, out Guid guidOutput)) // Checking if it's a valid Guid
             {
-                var socket = _manager.GetAllSockets().FirstOrDefault(s => s.Key == recipient);
+                var socket = _manager.GetAllSockets().FirstOrDefault(s => s.Key == recipientId);
 
                 if (socket.Value == null)
                 {
